@@ -1,14 +1,19 @@
 const mysql = require('mysql');
+const Auth = require('./auth');
 
 class Database {
   constructor() {
-    this.conn = mysql.createConnection({
-      host: '',
-      user: '',
-      password: '',
-      database: ''
+    Auth.getAuthData().then((data) => {
+      this.conn = mysql.createConnection({
+        host: data.host,
+        user: data.user,
+        password: data.password,
+        database: data.database
+      })
+      this.startConnection()
+    }).catch(err => {
+      console.error(err.message)
     })
-    this.startConnection()
   }
 
   addMutation() {
