@@ -1,0 +1,37 @@
+# Reference: https://www.exclamationlabs.com/blog/continuous-deployment-to-npm-using-gitlab-ci/
+
+# GitLab uses docker in the background, so we need to specify the 
+# image versions. This is useful because we're freely to use
+# multiple node versions to work with it. They come from the docker
+# repo.
+# Uses NodeJS V 14.15.0
+image: node:14.15.0
+
+# You specify the stages. Those are the steps that GitLab will go through 
+# Order matters. 
+stages:
+  - build
+  - test
+  - deploy
+
+Build:
+  stage: build
+  tags:
+    - Node
+  script:
+    - npm run build
+
+Test:
+  stage: test
+  tags:
+    - Node
+  script:
+    - npm run test
+
+
+Deploy:
+  stage: deploy
+  tags:
+    - Node
+  script:     
+    - npm run start
