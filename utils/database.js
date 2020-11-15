@@ -12,16 +12,20 @@ class Database {
   }
 
   addMutation() {
-    this.conn.query('INSERT INTO mutations (type) VALUES ("1")', function(err, results) {
-      if (err) console.log(err.message)
-      if(results) console.log(results)
+    return new Promise((resolve, reject) => {
+      this.conn.query('INSERT INTO mutations (type) VALUES ("1")', function(err, results) {
+        if (err) reject(err.message)
+        resolve(results)
+      })
     })
   }
 
   addNoMutation() {
-    this.conn.query('INSERT INTO mutations (type) VALUES ("0")', function(err, results) {
-      if (err) console.log(err.message)
-      if(results) console.log(results)
+    return new Promise((resolve, reject) => {
+      this.conn.query('INSERT INTO mutations (type) VALUES ("0")', function(err, results) {
+        if (err) reject(err.message)
+        resolve(results)
+      })
     })
   }
 

@@ -14,7 +14,7 @@ app.get('/stats', async function(req, res) {
     const countMutation = await db.getCountMutations()
     const countNoMutation = await db.getCountNoMutations()
     const ratio = countMutation / countNoMutation
-  
+
     res.json({
       count_mutations: countMutation,
       count_no_mutation: countNoMutation,
