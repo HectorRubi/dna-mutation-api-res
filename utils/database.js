@@ -8,23 +8,28 @@ class Database {
       password: '',
       database: ''
     })
+    this.startConnection()
   }
 
   addMutation() {
-    this.conn.connect()
-    conn.query('INSERT INTO mutations (type) VALUES ("1")', function(err, results) {
+    this.conn.query('INSERT INTO mutations (type) VALUES ("1")', function(err, results) {
       if (err) console.log(err.message)
       if(results) console.log(results)
     })
-    this.conn.end()
   }
 
   addNoMutation() {
-    this.conn.connect()
     this.conn.query('INSERT INTO mutations (type) VALUES ("0")', function(err, results) {
       if (err) console.log(err.message)
       if(results) console.log(results)
     })
+  }
+
+  startConnection() {
+    this.conn.connect()
+  }
+
+  endConnection() {
     this.conn.end()
   }
 }
