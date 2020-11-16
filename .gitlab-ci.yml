@@ -1,37 +1,39 @@
-# Reference: https://www.exclamationlabs.com/blog/continuous-deployment-to-npm-using-gitlab-ci/
+image: node:latest
 
-# GitLab uses docker in the background, so we need to specify the 
-# image versions. This is useful because we're freely to use
-# multiple node versions to work with it. They come from the docker
-# repo.
-# Uses NodeJS V 14.15.0
-image: node:14.15.0
-
-# You specify the stages. Those are the steps that GitLab will go through 
-# Order matters. 
 stages:
   - build
-  - test
   - deploy
 
-Build:
+cache:
+  paths:
+    - node_modules/
+
+install_dependencies:
   stage: build
-  tags:
-    - Node
   script:
-    - npm run build
+    - npm install
+  artifacts:
+    paths:
+      - node_modules/
 
-Test:
-  stage: test
-  tags:
-    - Node
-  script:
-    - npm run test
-
-
-Deploy:
+deploy:
+  image: python:latest
   stage: deploy
-  tags:
-    - Node
-  script:     
-    - npm run start
+  script:
+    - rm -rf /var/lib/apt/lists/*
+    - apt-get update
+    - apt-cache gencaches
+    - apt-get install -y zip unzip
+    - echo HOST=$HOST >> .env
+    - echo USERNAME=$USERNAME >> .env
+    - echo PASSWORD=$PASSWORD >> .env
+    - echo DATABASE=$DATABASE >> .env
+    - ls -sail
+    - zip test.zip -r .
+    - pip install awscli
+    - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+    - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+    - aws configure set region us-east-2
+    - aws s3 cp test.zip s3://elasticbeanstalk-us-east-2-669867583814/test-$CI_PIPELINE_ID.zip 
+    - aws elasticbeanstalk create-application-version --application-name dna-mutation-GitLab-CI --version-label test-$CI_PIPELINE_ID.zip --source-bundle S3Bucket=elasticbeanstalk-us-east-2-669867583814,S3Key=test-$CI_PIPELINE_ID.zip
+    - aws elasticbeanstalk update-environment --application-name dna-mutation-GitLab-CI --environment-name  DnaMutationGitlabCi-env --version-label test-$CI_PIPELINE_ID.zip

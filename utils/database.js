@@ -1,19 +1,17 @@
 const mysql = require('mysql');
-const Auth = require('./auth');
+require('dotenv').config();
+const { env } = process;
 
 class Database {
   constructor() {
-    Auth.getAuthData().then((data) => {
-      this.conn = mysql.createConnection({
-        host: data.host,
-        user: data.user,
-        password: data.password,
-        database: data.database
-      })
-      this.startConnection()
-    }).catch(err => {
-      console.error(err.message)
+    console.log(env)
+    this.conn = mysql.createConnection({
+      host: env.HOST,
+      user: env.USERNAME,
+      password: env.PASSWORD,
+      database: env.DATABASE
     })
+    this.startConnection()
   }
 
   addMutation() {
