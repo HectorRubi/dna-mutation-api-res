@@ -28,7 +28,7 @@ deploy:
     - pip install awscli
     - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
     - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-    - aws configure set region us-east-1
+    - aws configure set region us-east-2
     - aws s3 cp test.zip s3://elasticbeanstalk-us-east-2-669867583814/test-$CI_PIPELINE_ID.zip 
     - aws elasticbeanstalk create-application-version --application-name dna-mutation-GitLab-CI --version-label test-$CI_PIPELINE_ID.zip --source-bundle S3Bucket=elasticbeanstalk-us-east-2-669867583814,S3Key=test-$CI_PIPELINE_ID.zip
     - aws elasticbeanstalk update-environment --application-name dna-mutation-GitLab-CI --environment-name  DnaMutationGitlabCi-env --version-label test-$CI_PIPELINE_ID.zip
