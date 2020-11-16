@@ -42,5 +42,11 @@ app.post('/mutation', jsonParser, function(req, res) {
   }
 })
 
+app.use("/", (req, res, next) => {
+  res.status(200).json({
+    message: "Hi im working",
+  });
+});
+
 app.listen(port)
-console.log('Listen: http://localhost:' + port)
+console.log('Listen: http://127.0.0.1:' + port)
