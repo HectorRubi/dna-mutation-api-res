@@ -24,6 +24,8 @@ deploy:
     - apt-get update
     - apt-cache gencaches
     - apt-get install -y zip unzip
+    - echo "HOST="$HOST"\nUSERNAME="$USERNAME"\nPASSWORD="$PASSWORD"\nDATABASE="$DATABASE > .env
+    - ls -sail
     - zip test.zip -r *
     - pip install awscli
     - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
