@@ -4,6 +4,7 @@ const { env } = process;
 
 class Database {
   constructor() {
+    console.log(env)
     this.conn = mysql.createConnection({
       host: env.HOST,
       user: env.USERNAME,
